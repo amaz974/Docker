@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  node:
+    build: .
+    image: mon-image-nodejs
+    container_name: mon-conteneur
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=mysecretpassword
+      - DB_NAME=mydatabase
+      - DB_PORT=3306
+    depends_on:
+      - db
+    networks:
+      - my_network
+
+  db:
+    image: mariadb:latest
+    container_name: mariadb-container
+    environment:
+      - MYSQL_ROOT_PASSWORD=mysecretpassword
+      - MYSQL_DATABASE=mydatabase
+    ports:
+      - "3308:3306"
+    networks:
+      - my_network
+
+networks:
+  my_network:
