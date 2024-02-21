@@ -1,8 +1,20 @@
-# Utilisez l'image officielle d'Apache HTTP Server
-FROM httpd:latest
+# Utilisez l'image Node.js v18 avec Alpine Linux
+FROM node:18-alpine
 
-# Copiez votre fichier index.html dans le répertoire des documents d'Apache
-COPY C:\Users\alex\Desktop\COUR\docker\Docker-github\Docker\html/index.html /usr/local/apache2/htdocs/
+# Créez et définissez le répertoire de travail
+WORKDIR /app
 
-# Exposez le port 80 pour permettre l'accès à Apache
-EXPOSE 80
+# Copiez le fichier package.json et package-lock.json dans le répertoire de travail
+COPY src/package*.json ./
+
+# Installez les dépendances
+RUN npm install
+
+# Copiez tous les fichiers de l'application dans le répertoire de travail
+COPY src/ .
+
+# Exposez le port 3000 pour l'application
+EXPOSE 3000
+
+# Commande pour démarrer l'application
+CMD ["node", "server.js"]
