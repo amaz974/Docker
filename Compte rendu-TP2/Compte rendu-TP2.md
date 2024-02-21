@@ -18,7 +18,11 @@ Lancement du conteneur avec la nouvelle image :
 
 la commande ***docker-compose up*** construira les images, démarrera les deux services et configurera les conteneurs selon les spécifications du fichier **docker-compose.yml.**
 
-![](Aspose.Words.6bece5a7-176f-479e-a77c-02907cf964c6.005.jpeg)Pour que l’application Node.js puisse utiliser la base de données conteneurisée dans Docker Compose, nous devons nous assurer que les services peuvent se connecter les uns aux autres.![](Aspose.Words.6bece5a7-176f-479e-a77c-02907cf964c6.006.jpeg)
+![](Aspose.Words.6bece5a7-176f-479e-a77c-02907cf964c6.005.jpeg)
+
+Pour que l’application Node.js puisse utiliser la base de données conteneurisée dans Docker Compose, nous devons nous assurer que les services peuvent se connecter les uns aux autres.
+
+![](Aspose.Words.6bece5a7-176f-479e-a77c-02907cf964c6.006.jpeg)
 
 Voici le fichier **docker-compose.yml** configurer pour utiliser des variables d'environnement :
 
