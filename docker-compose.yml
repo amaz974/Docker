@@ -25,7 +25,7 @@ services:
       - MYSQL_ROOT_PASSWORD=mysecretpassword
       - MYSQL_DATABASE=mydatabase
     ports:
-      - "3308:3306"
+      - "3306:3306"
     networks:
       - my_network
 
