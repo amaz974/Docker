@@ -7,7 +7,7 @@
 // Uncomment this block to use mysql
 module.exports = {
     dialect: "mysql",
-    hostname: process.env.DB_HOST || "mysql_container",
+    hostname: process.env.DB_HOST || "db",
     username: process.env.DB_USER || "root",
     password: process.env.DB_PASSWORD || "root",
     database: process.env.DB_NAME || "mydatabase",

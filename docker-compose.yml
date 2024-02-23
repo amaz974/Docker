@@ -1,33 +1,36 @@
 version: '3'
 
 services:
-  node:
-    build: .
-    image: mon-image-nodejs
-    container_name: mon-conteneur
-    ports:
-      - "3000:3000"
-    environment:
-      - DB_HOST=db
-      - DB_USER=root
-      - DB_PASSWORD=mysecretpassword
-      - DB_NAME=mydatabase
-      - DB_PORT=3306
-    depends_on:
-      - db
-    networks:
-      - my_network
-
+  # Service de base de données MariaDB
   db:
     image: mariadb:latest
     container_name: mariadb-container
     environment:
-      - MYSQL_ROOT_PASSWORD=mysecretpassword
-      - MYSQL_DATABASE=mydatabase
-    ports:
-      - "3306:3306"
+      - MYSQL_ROOT_PASSWORD=root  # Mot de passe du superutilisateur MySQL
+      - MYSQL_DATABASE=mydatabase  # Nom de la base de données à créer
+    expose:
+      - "3306"  # Exposer le port 3306 pour permettre aux autres services de se connecter
     networks:
-      - my_network
+      - my_network  # Utilisation du réseau personnalisé défini ci-dessous
+
+  # Service Node.js
+  node:
+    build: .  # Utilise le Dockerfile dans le répertoire actuel pour construire l'image
+    image: mon-image-nodejs
+    container_name: nodecont
+    ports:
+      - "3000:3000"  # Redirige le port 3000 du conteneur vers le port 3000 de l'hôte
+    environment:
+      - DB_HOST=db  # Hostname du service de base de données
+      - DB_USER=root  # Nom d'utilisateur pour la connexion à la base de données
+      - DB_PASSWORD=root  # Mot de passe pour la connexion à la base de données
+      - DB_NAME=mydatabase  # Nom de la base de données à laquelle se connecter
+      - DB_PORT=3306  # Port auquel le service de base de données expose MySQL
+    networks:
+      - my_network  # Utilisation du réseau personnalisé défini ci-dessous
+    depends_on:
+      - db  # Le service Node.js dépend du service de base de données, assurant ainsi un démarrage séquentiel
 
 networks:
   my_network:
+    driver: bridge  # Utilise le driver bridge pour créer un réseau personnalisé entre les services

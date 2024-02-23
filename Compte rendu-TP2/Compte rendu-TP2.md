@@ -2,41 +2,53 @@
 
 Fichier models/inex.js adapté :
 
-![](Aspose.Words.6bece5a7-176f-479e-a77c-02907cf964c6.001.jpeg)
+![](Aspose.Words.c4f4ec50-e611-49d2-bc10-f1a09b745afd.001.jpeg)
 
 Fichier db.config.js adapté :
 
-![](Aspose.Words.6bece5a7-176f-479e-a77c-02907cf964c6.002.jpeg)
+![](Aspose.Words.c4f4ec50-e611-49d2-bc10-f1a09b745afd.002.jpeg)
 
 Reconstruction de l'image Docker :
 
-![](Aspose.Words.6bece5a7-176f-479e-a77c-02907cf964c6.003.jpeg)
+![](Aspose.Words.c4f4ec50-e611-49d2-bc10-f1a09b745afd.003.jpeg)
 
 Lancement du conteneur avec la nouvelle image :
 
-![](Aspose.Words.6bece5a7-176f-479e-a77c-02907cf964c6.004.png)
+![](Aspose.Words.c4f4ec50-e611-49d2-bc10-f1a09b745afd.004.png)
 
-la commande ***docker-compose up*** construira les images, démarrera les deux services et configurera les conteneurs selon les spécifications du fichier **docker-compose.yml.**
+Voici le fichier Dockerfile :
 
-![](Aspose.Words.6bece5a7-176f-479e-a77c-02907cf964c6.005.jpeg)
+![](Aspose.Words.c4f4ec50-e611-49d2-bc10-f1a09b745afd.005.jpeg)La commande ***docker-compose up*** construira les images, démarrera les deux services et configurera les conteneurs selon les spécifications du fichier **docker-compose.yml.**
 
-Pour que l’application Node.js puisse utiliser la base de données conteneurisée dans Docker Compose, nous devons nous assurer que les services peuvent se connecter les uns aux autres.
+![](Aspose.Words.c4f4ec50-e611-49d2-bc10-f1a09b745afd.006.jpeg)
 
-![](Aspose.Words.6bece5a7-176f-479e-a77c-02907cf964c6.006.jpeg)
+Pour que l’application Node.js puisse utiliser la base de données conteneurisée dans Docker Compose, nous devons nous assurer que les services peuvent se connecter les uns aux autres. Voici le fichier **docker-compose.yml** :
 
-Voici le fichier **docker-compose.yml** configurer pour utiliser des variables d'environnement :
+![](Aspose.Words.c4f4ec50-e611-49d2-bc10-f1a09b745afd.007.jpeg)
 
-![](Aspose.Words.6bece5a7-176f-479e-a77c-02907cf964c6.007.jpeg)
+**Problème rencontré :** CMD : Docker-compose up
 
-Publié le port 3000 et exposer le port 3006 sans le publier :
+La sortie indique "dependency failed to start: container mariadb-container has no healthcheck configured."
 
-![](Aspose.Words.6bece5a7-176f-479e-a77c-02907cf964c6.008.jpeg)
+Pour résoudre cela, j’ai ajouté une configuration de santé (healthcheck) pour le service MariaDB dans le fichier **docker-compose.yml.**
+
+![](Aspose.Words.c4f4ec50-e611-49d2-bc10-f1a09b745afd.008.png)
+
+![](Aspose.Words.c4f4ec50-e611-49d2-bc10-f1a09b745afd.009.png)
+
+Un autre message d’erreur est apparue après la commande **docker-compose up** :
+
+![](Aspose.Words.c4f4ec50-e611-49d2-bc10-f1a09b745afd.010.png)
+
+Après investigation, un service tourne sur mon PC sur le port 3306, je me suis aperçu que c’était Mysqld, je l’ai donc arrêté.
+
+De plus, node se lançait avant mariadb, cela peut entraîner des erreurs de connexion à la base de données, car la base de données ne serait pas encore disponible. Pour éviter cela j’ai changé l’ordre du fichier et ajouté une option : depends\_on.
 
 **Q1 : Que se passe t'il si un de mes ports publiés est déjà utilisé ?**
 
 Docker affichera un message d'erreur et ne pourra pas démarrer le conteneur.
 
-![](Aspose.Words.6bece5a7-176f-479e-a77c-02907cf964c6.009.png)
+![](Aspose.Words.c4f4ec50-e611-49d2-bc10-f1a09b745afd.011.png)
 
 Dans ce cas, on doit choisir un autre port disponible ou libérer le port déjà utilisé sur votre machine avant de relancer Docker Compose.
 
